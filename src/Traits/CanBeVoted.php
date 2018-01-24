@@ -4,6 +4,7 @@ namespace Ty666\LaravelVote\Traits;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 trait CanBeVoted
 {
