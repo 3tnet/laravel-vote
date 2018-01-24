@@ -19,7 +19,12 @@ trait CanCountDownVotes
 
     public function decrementDownVotesCount($amount = 1)
     {
-        return $this->where($this->downVotesCountField, '>', 0)->decrement($this->downVotesCountField, $amount);
+        if ($this->getDownVotesCount() >= $amount)
+            return $this->decrement($this->downVotesCountField, $amount);
+        else {
+            $this->setAttribute($this->downVotesCountField, 0);
+            return $this->save();
+        }
     }
 
 }

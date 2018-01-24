@@ -10,6 +10,7 @@ use Ty666\LaravelVote\Events\Voted;
 use Ty666\LaravelVote\Listeners\UpdateDownVotesCount;
 use Ty666\LaravelVote\Listeners\UpdateUpVotesCount;
 use Event;
+use DB;
 
 class TestCase extends \Illuminate\Foundation\Testing\TestCase
 {
@@ -50,6 +51,15 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
 
         Event::listen(Voted::class, UpdateUpVotesCount::class);
         Event::listen(Voted::class, UpdateDownVotesCount::class);
+
+//        DB::listen(function ($query) {
+//            $sql = str_replace('?', "'%s'", $query->sql);
+//            foreach ($query->bindings as &$binding) {
+//                $binding = (string)$binding;
+//            }
+//            $sql = sprintf($sql, ...$query->bindings);
+//            echo "$sql\n";
+//        });
     }
 
     /**
