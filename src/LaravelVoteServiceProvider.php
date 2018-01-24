@@ -28,7 +28,7 @@ class LaravelVoteServiceProvider extends ServiceProvider
         if (!class_exists('CreateLaravelFollowTables')) {
             $datePrefix = date('Y_m_d_His');
             $this->publishes([
-                $root . '/database/migrations/create_laravel_vote_table.php' => database_path("/migrations/{$datePrefix}_create_laravel_vote_table.php"),
+                $root . '/database/migrations/create_laravel_votes_table.php' => database_path("/migrations/{$datePrefix}_create_laravel_votes_table.php"),
             ], 'migrations');
         }
 

@@ -51,7 +51,6 @@ trait CanVote
                 event(new Voted($updated, $className, $this, $voteChanges, $type, $isModelObject ? $targets->where($keyName, $updated)->first() : null));
             }
         }
-
     }
 
     protected function votings($className)
@@ -89,7 +88,7 @@ trait CanVote
 
         foreach ($formattedTargets as $className => $targetIds) {
 
-            $cancelVotes = $this->votings($className)->select(1)->find($targetIds);
+            $cancelVotes = $this->votings($className)->find($targetIds);
 
             $cancelVoteIds = [];
             foreach ($cancelVotes as $cancelVote) {

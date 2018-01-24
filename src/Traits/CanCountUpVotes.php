@@ -19,6 +19,6 @@ trait CanCountUpVotes
 
     public function decrementUpVotesCount($amount = 1)
     {
-        return $this->decrement($this->upVotesCountField, $amount);
+        return $this->where($this->downVotesCountField, '>', 0)->decrement($this->upVotesCountField, $amount);
     }
 }

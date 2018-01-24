@@ -59,7 +59,7 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
     {
         $fileSystem = new Filesystem();
         $fileSystem->copy(
-            __DIR__ . '/../database/migrations/create_laravel_vote_table.php',
+            __DIR__ . '/../database/migrations/create_laravel_votes_table.php',
             __DIR__ . '/../tests/database/migrations/create_laravel_vote_table.php'
         );
         foreach ($fileSystem->files(__DIR__ . '/../tests/database/migrations') as $file) {

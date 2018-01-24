@@ -6,7 +6,6 @@ use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Queue\SerializesModels;
 use Ty666\LaravelVote\Exceptions\TargetException;
-use Ty666\LaravelVote\Tests\User;
 
 
 class Voted
@@ -24,13 +23,13 @@ class Voted
      * Voted constructor.
      * @param int $targetId
      * @param string $className
-     * @param User $user
+     * @param Model $user
      * @param array $change
      * @param string $type
      * @param Model|null $targetModel
      * @throws TargetException
      */
-    public function __construct(int $targetId, string $className, User $user, array $change, string $type, Model $targetModel = null)
+    public function __construct(int $targetId, string $className,Model $user, array $change, string $type, Model $targetModel = null)
     {
         $this->targetId = $targetId;
         $this->className = $className;
@@ -61,9 +60,9 @@ class Voted
     }
 
     /**
-     * @return User
+     * @return Model
      */
-    public function getUser(): User
+    public function getUser(): Model
     {
         return $this->user;
     }
