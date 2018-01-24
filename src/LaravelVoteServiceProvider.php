@@ -2,7 +2,7 @@
 
 namespace Ty666\LaravelVote;
 
-use Illuminate\Routing\Route;
+use Route;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Ty666\LaravelVote\Events\Voted;
@@ -42,10 +42,10 @@ class LaravelVoteServiceProvider extends ServiceProvider
     {
         if (!Route::hasMacro('vote')) {
             Route::macro('vote', function ($targetName, $targetController) {
-                $paramName = rtrim($targetName, 's');
-                $this->put($targetName . '/{' . $paramName . '}/up_vote', $targetController . '@upVote')->name($targetName . '.upVote');
-                $this->put($targetName . '/{' . $paramName . '}/down_vote', $targetController . '@downVote')->name($targetName . '.downVote');
-                $this->put($targetName . '/{' . $paramName . '}/cancel_vote', $targetController . '@cancelVote')->name($targetName . '.cancelVote');
+                $paramName = str_singular($targetName);
+                $this->patch($targetName . '/{' . $paramName . '}/up_vote', $targetController . '@upVote')->name($targetName . '.upVote');
+                $this->patch($targetName . '/{' . $paramName . '}/down_vote', $targetController . '@downVote')->name($targetName . '.downVote');
+                $this->patch($targetName . '/{' . $paramName . '}/cancel_vote', $targetController . '@cancelVote')->name($targetName . '.cancelVote');
             });
         }
     }
