@@ -41,11 +41,23 @@ class LaravelVoteServiceProvider extends ServiceProvider
     public function macroRoute()
     {
         if (!Route::hasMacro('vote')) {
-            Route::macro('vote', function ($targetName, $targetController) {
+            Route::macro('vote', function ($targetName, $targetController, $options = []) {
+                $methods = [
+                    'up_vote' => 'upVote',
+                    'down_vote' => 'downVote',
+                    'cancel_vote' => 'cancelVote'
+                ];
+                if (isset($options['only'])) {
+                    $methods = array_only($methods, $options['only']);
+                } else if (isset($options['except'])) {
+                    $methods = array_except($methods, $options['except']);
+                }
+
                 $paramName = str_singular($targetName);
-                $this->patch($targetName . '/{' . $paramName . '}/up_vote', $targetController . '@upVote')->name($targetName . '.upVote');
-                $this->patch($targetName . '/{' . $paramName . '}/down_vote', $targetController . '@downVote')->name($targetName . '.downVote');
-                $this->patch($targetName . '/{' . $paramName . '}/cancel_vote', $targetController . '@cancelVote')->name($targetName . '.cancelVote');
+                foreach ($methods as $method) {
+                    $camelCase = camel_case($method);
+                    $this->patch("$targetName/{{$paramName}}/$method", "$targetController@$camelCase")->name("$targetName.$camelCase");
+                }
             });
         }
     }
