@@ -86,6 +86,8 @@ trait CanVote
             $keyName = $targets->first()->getKeyName();
         }
 
+        $type = 'cancel_vote';
+
         foreach ($formattedTargets as $className => $targetIds) {
 
             $cancelVotes = $this->votings($className)->find($targetIds);
@@ -96,8 +98,8 @@ trait CanVote
                     'up_vote' => 0,
                     'down_vote' => 0,
                 ];
-                $type = $cancelVote->pivot->type;
-                $changes[$type] = -1;
+                $originType = $cancelVote->pivot->type;
+                $changes[$originType] = -1;
                 $votableId = $cancelVote->pivot->$votableIdKey;
                 $cancelVoteIds[] = $votableId;
                 event(new Voted($votableId, $className, $this, $changes, $type, $isModelObject ? $targets->where($keyName, $votableId)->first() : null));

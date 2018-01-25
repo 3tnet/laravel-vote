@@ -5,15 +5,17 @@ namespace Ty666\LaravelVote\Tests;
 use Illuminate\Database\Eloquent\Model;
 use Ty666\LaravelVote\Events\Voted;
 
-class CanVotedest extends TestCase
+class CanVoteTest extends TestCase
 {
-    private function assertVotedEvent(Voted $votedEvent, Model $targetObj, $user, array $change)
+    private function assertVotedEvent(Voted $votedEvent, Model $exceptTargetObj, $exceptUser, array $exceptChange, $exceptType)
     {
-        $this->assertEquals($targetObj->getKey(), $votedEvent->getTargetId());
-        $this->assertEquals($targetObj->getKey(), $votedEvent->getTargetModel()->getKey());
-        $this->assertEquals(get_class($targetObj), $votedEvent->getClassName());
-        $this->assertSame($user, $votedEvent->getUser());
-        $this->assertEquals($change, $votedEvent->getChange());
+        $this->assertEquals($exceptTargetObj->getKey(), $votedEvent->getTargetId());
+        $this->assertEquals($exceptTargetObj->getKey(), $votedEvent->getTargetModel()->getKey());
+        $this->assertEquals(get_class($exceptTargetObj), $votedEvent->getClassName());
+        $this->assertSame($exceptUser, $votedEvent->getUser());
+        $this->assertEquals($exceptChange, $votedEvent->getChange());
+        $this->assertEquals($exceptType, $votedEvent->getType());
+
     }
 
     public function test_user_up_vote_by_id()
@@ -26,7 +28,7 @@ class CanVotedest extends TestCase
             $this->assertVotedEvent($event, Other::find($i), $user, [
                 'up_vote' => 1,
                 'down_vote' => 0,
-            ]);
+            ], 'up_vote');
             $i++;
         }
     }
@@ -45,7 +47,7 @@ class CanVotedest extends TestCase
             $this->assertVotedEvent($event, $toUpVotes[$i], $user, [
                 'up_vote' => 1,
                 'down_vote' => 0,
-            ]);
+            ], 'up_vote');
         }
     }
 
@@ -60,7 +62,7 @@ class CanVotedest extends TestCase
         $this->assertVotedEvent($this->firedEvents[1], $other, $user, [
             'up_vote' => 1,
             'down_vote' => -1
-        ]);
+        ], 'up_vote');
     }
 
     public function test_user_down_vote_after_up_vote()
@@ -74,7 +76,7 @@ class CanVotedest extends TestCase
         $this->assertVotedEvent($this->firedEvents[1], $other, $user, [
             'up_vote' => -1,
             'down_vote' => 1
-        ]);
+        ], 'down_vote');
     }
 
     public function test_cancel_vote_with_no_voted()
@@ -95,7 +97,7 @@ class CanVotedest extends TestCase
         $this->assertVotedEvent($this->firedEvents[1], $other, $user, [
             'up_vote' => -1,
             'down_vote' => 0
-        ]);
+        ], 'cancel_vote');
     }
 
     public function test_cancel_vote_after_down_vote()
@@ -108,7 +110,7 @@ class CanVotedest extends TestCase
         $this->assertVotedEvent($this->firedEvents[1], $other, $user, [
             'up_vote' => 0,
             'down_vote' => -1
-        ]);
+        ], 'cancel_vote');
     }
 
     public function test_cancel_vote_by_id()
@@ -121,6 +123,6 @@ class CanVotedest extends TestCase
         $this->assertVotedEvent($this->firedEvents[1], $other, $user, [
             'up_vote' => -1,
             'down_vote' => 0
-        ]);
+        ], 'cancel_vote');
     }
 }
