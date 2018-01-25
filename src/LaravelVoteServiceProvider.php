@@ -54,9 +54,8 @@ class LaravelVoteServiceProvider extends ServiceProvider
                 }
 
                 $paramName = str_singular($targetName);
-                foreach ($methods as $method) {
-                    $camelCase = camel_case($method);
-                    $this->patch("$targetName/{{$paramName}}/$method", "$targetController@$camelCase")->name("$targetName.$camelCase");
+                foreach ($methods as $path => $method) {
+                    $this->patch("$targetName/{{$paramName}}/$path", "$targetController@$method")->name("$targetName.$method");
                 }
             });
         }
